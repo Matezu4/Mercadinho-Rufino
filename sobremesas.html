@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobremesas - Mercadinho Rufino</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+         :root {
+            --primary-color: #d76b7e;
+            --secondary-color: #8fc58b;
+            --background-color: #dbe6c0;
+            --text-dark: #222;
+            --footer-color: #d88952;
+            --container-bg: #f8f9e4;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        body.menu-open {
+            overflow: hidden;
+        }
+        /* HEADER PADRONIZADO */
+        
+        header {
+            background: linear-gradient(90deg, #e88290, #d76b7e);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .header-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .desktop-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
+        
+        .desktop-nav a:hover {
+            color: #88481a;
+        }
+        
+        .search-box {
+            background: white;
+            border-radius: 25px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            width: 260px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 8px;
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .search-box i {
+            font-size: 18px;
+            color: #d88952;
+            cursor: pointer;
+        }
+        
+        .mobile-search-container {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: linear-gradient(180deg, #e88290, #d76b7e);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu.active {
+            left: 0;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .mobile-menu-header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .mobile-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+        }
+        
+        .mobile-nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 10px;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        /* CONTEÚDO SOBREMESAS */
+        
+        .banner {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .banner h1 {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 10px 30px;
+            border-radius: 10px;
+            font-size: 28px;
+        }
+        
+        .main-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .recipe-container {
+            background-color: var(--container-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+            padding: 20px;
+        }
+        
+        .container-receita {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            padding: 15px;
+        }
+        
+        .receita {
+            width: 45%;
+        }
+        
+        .receita img {
+            width: 90%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .ingredientes {
+            font-size: 16px;
+        }
+        
+        .ingredientes h2 {
+            color: #ae431e;
+            margin-bottom: 5px;
+        }
+        
+        .ingredientes ul {
+            color: #88481a;
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .preparo {
+            width: 45%;
+            font-size: 16px;
+            border-left: 2px solid #d06224;
+            padding-left: 20px;
+        }
+        
+        .preparo h2 {
+            color: #849a28;
+            margin-bottom: 5px;
+        }
+        
+        .preparo ol {
+            color: #2b4a2b;
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .preparo img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .dica {
+            color: #ab2a02;
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 10px;
+            background-color: #ffe6d6;
+            border-radius: 8px;
+            border-left: 4px solid #d06224;
+        }
+        /* RODAPÉ PADRONIZADO */
+        
+        footer {
+            background-color: var(--footer-color);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: auto;
+            gap: 15px;
+        }
+        
+        footer img {
+            width: 100px;
+            border-radius: 50%;
+        }
+        
+        footer nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        footer nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        footer nav a:hover {
+            color: #333;
+        }
+        
+        footer .socials {
+            display: flex;
+            gap: 12px;
+        }
+        
+        footer .socials a {
+            color: white;
+            font-size: 20px;
+        }
+        
+        footer button {
+            background: #d7f5d5;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            color: #2b4a2b;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        footer button:hover {
+            background: #c3e6c3;
+        }
+        /* RESPONSIVIDADE */
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-search-container {
+                display: flex;
+            }
+            .header-container {
+                flex-wrap: nowrap;
+            }
+            .logo-container {
+                flex: 1;
+            }
+            .container-receita {
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
+            }
+            .receita,
+            .preparo {
+                width: 90%;
+            }
+            .preparo {
+                border-left: none;
+                border-top: 2px solid #d06224;
+                padding-left: 0;
+                padding-top: 20px;
+            }
+            .banner h1 {
+                font-size: 24px;
+            }
+            footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            footer nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 10px 15px;
+            }
+            header img {
+                width: 60px;
+                height: 60px;
+            }
+            .receita,
+            .preparo {
+                width: 95%;
+            }
+            .banner h1 {
+                font-size: 20px;
+            }
+            .recipe-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<script>
+    // Sistema de Pesquisa Global
+    function setupGlobalSearch() {
+        const searchInputs = document.querySelectorAll('.search-box input');
+        const searchIcons = document.querySelectorAll('.search-box i');
+        
+        // Função para executar a busca e redirecionar
+        function performGlobalSearch(searchTerm) {
+            if (!searchTerm.trim()) {
+                return; // Não faz nada se estiver vazio
+            }
+            
+            // Codificar o termo de busca para URL
+            const encodedTerm = encodeURIComponent(searchTerm.trim());
+            
+            // Redirecionar para produtos.html com o parâmetro de busca
+            window.location.href = `produtos.html?search=${encodedTerm}`;
+        }
+        
+        // Event listeners para todos os inputs de busca
+        searchInputs.forEach(input => {
+            // Busca ao pressionar Enter
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performGlobalSearch(this.value);
+                }
+            });
+            
+            // Foco no input - mostrar dica se estiver na página de produtos
+            if (window.location.pathname.includes('produtos.html')) {
+                input.setAttribute('placeholder', 'Busque por produtos, categorias...');
+            }
+        });
+        
+        // Event listeners para ícones de busca
+        searchIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const searchInput = this.previousElementSibling;
+                performGlobalSearch(searchInput.value);
+            });
+        });
+        
+        // Adicionar estilo visual para indicar que a busca é global
+        const style = document.createElement('style');
+        style.textContent = `
+            .search-box {
+                position: relative;
+                transition: all 0.3s ease;
+            }
+            
+            .search-box:focus-within {
+                box-shadow: 0px 3px 12px rgba(215, 107, 126, 0.3);
+                transform: scale(1.02);
+            }
+            
+            .search-box::after {
+                content: '↵';
+                position: absolute;
+                right: 35px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #d88952;
+                font-weight: bold;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            }
+            
+            .search-box:focus-within::after {
+                opacity: 1;
+            }
+            
+            .search-box input:focus {
+                padding-right: 25px;
+            }
+            
+            @media (max-width: 768px) {
+                .search-box::after {
+                    display: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Inicializar sistema de busca global
+    document.addEventListener('DOMContentLoaded', function() {
+        setupGlobalSearch();
+    });
+</script>
+
+<body>
+    <!-- Overlay para fechar o menu -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Menu Mobile Lateral -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+            <button class="close-menu" id="closeMenu">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <nav class="mobile-nav">
+            <a href="index.html"><i class="bi bi-house-door-fill"></i> Home</a>
+            <a href="sobre.html"><i class="bi bi-people-fill"></i> Sobre Nós</a>
+            <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+            <a href="produtos.html"><i class="bi bi-basket-fill"></i> Produtos</a>
+            <a href="promo.html"><i class="bi bi-percent"></i> Promoções</a>
+            <a href="novo.html"><i class="bi bi-stars"></i> Novidades</a>
+            <a href="#"><i class="bi bi-geo-alt-fill"></i> Localização</a>
+            <a href="#"><i class="bi bi-telephone-inbound-fill"></i> Contato</a>
+        </nav>
+    </div>
+
+    <!-- Cabeçalho Padronizado -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+            </div>
+
+            <nav class="desktop-nav">
+                <a href="index.html"><i class="bi bi-house-door-fill"></i> Home</a>
+                <a href="sobre.html"><i class="bi bi-people-fill"></i> Sobre Nós</a>
+                <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+                <a href="produtos.html"><i class="bi bi-basket-fill"></i> Produtos</a>
+                <a href="promo.html"><i class="bi bi-percent"></i> Promoções</a>
+                <a href="novo.html"><i class="bi bi-stars"></i> Novidades</a>
+
+                <div class="search-box">
+                    <input type="text" placeholder="Buscar produtos...">
+                    <i class="bi bi-search"></i>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Barra de pesquisa mobile -->
+        <div class="mobile-search-container">
+            <div class="search-box" style="width: 100%;">
+                <input type="text" placeholder="Buscar produtos...">
+                <i class="bi bi-search"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <div class="banner">
+        <h1>Deliciosas Sobremesas</h1>
+    </div>
+
+    <!-- Container principal -->
+    <div class="main-container">
+        <!-- Receita 1 - Mousse -->
+        <div class="recipe-container">
+            <div class="container-receita">
+                <div class="receita">
+                    <img src="imgs/ingre4.png" alt="Ingredientes para Mousse">
+                    <div class="ingredientes">
+                        <h2>Mousse</h2>
+                        <p><strong>Ingredientes (5 porções):</strong></p>
+                        <ul>
+                            <li>1 pacote de suco em pó do sabor de sua preferência (ex: morango, maracujá, limão)</li>
+                            <li>1 lata de leite condensado</li>
+                            <li>1 lata de creme de leite</li>
+                            <li>1/2 xícara de água quente</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="preparo">
+                    <h2>Modo de preparo:</h2>
+                    <ol>
+                        <li>Dissolva o suco em pó na água quente, mexendo bem até dissolver completamente. Reserve para esfriar um pouco.</li>
+                        <li>No liquidificador, bata o leite condensado, o creme de leite e o suco dissolvido até obter uma mistura homogênea.</li>
+                        <li>Despeje a mistura em taças individuais ou em um refratário grande.</li>
+                        <li>Leve à geladeira por pelo menos 2 horas, ou até firmar.</li>
+                        <li>Sirva gelado. Opcional: decore com raspas de chocolate, frutas ou polvilhe um pouco de suco em pó por cima para dar cor</li>
+                    </ol>
+                    <p class="dica">Dica: Para a mousse ficar mais aerada e fofinha, bata a mistura no liquidificador por uns 3 a 5 minutos e, se quiser, adicione um pouquinho de creme de leite gelado por cima antes de levar à geladeira.</p>
+
+                    <img src="imgs/mousse.jpg" alt="Mousse pronto">
+                </div>
+            </div>
+        </div>
+
+        <!-- Receita 2 - Brigadeiro -->
+        <div class="recipe-container">
+            <div class="container-receita">
+                <div class="receita">
+                    <img src="imgs/ingre9.png" alt="Ingredientes para Brigadeiro">
+                    <div class="ingredientes">
+                        <h2>Brigadeiro</h2>
+                        <p><strong>Ingredientes (16 porções):</strong></p>
+                        <ul>
+                            <li>1 lata de leite condensado</li>
+                            <li>2 colheres de sopa de chocolate em pó</li>
+                            <li>1 colher de sopa de manteiga</li>
+                            <li>Chocolate granulado para decorar</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="preparo">
+                    <h2>Modo de preparo:</h2>
+                    <ol>
+                        <li>Em uma panela, misture o leite condensado, o chocolate em pó e a manteiga.</li>
+                        <li>Cozinhe em fogo médio, mexendo sem parar, até que a mistura comece a desgrudar do fundo da panela.</li>
+                        <li>Retire do fogo e transfira para um prato untado com manteiga.</li>
+                        <li>Deixe esfriar completamente.</li>
+                        <li>Unte as mãos com manteiga e forme pequenas bolinhas com a massa.</li>
+                        <li>Passe as bolinhas no chocolate granulado e coloque em forminhas de papel.</li>
+                    </ol>
+                    <p class="dica">Dica: Para um brigadeiro mais cremoso, cozinhe por menos tempo. Para um brigadeiro mais firme, cozinhe por mais tempo até que a massa desgrude completamente do fundo da panela.</p>
+
+                    <img src="imgs/brigadeiro.jpg" alt="Brigadeiros prontos">
+                </div>
+            </div>
+        </div>
+
+        <!-- Receita 3 - Pudim -->
+        <div class="recipe-container">
+            <div class="container-receita">
+                <div class="receita">
+                    <img src="imgs/ingre10.png" alt="Ingredientes para Pudim">
+                    <div class="ingredientes">
+                        <h2>Pudim</h2>
+                        <p><strong>Ingredientes (10 porções):</strong></p>
+                        <ul>
+                            <li>1 lata de leite condensado</li>
+                            <li>2 caixinhas de creme de leite</li>
+                            <li>1 pacote de gelatina sem sabor (12g)</li>
+                            <li>1 xícara de leite</li>
+                            <li>1 xícara de açúcar (para a calda)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="preparo">
+                    <h2>Modo de preparo:</h2>
+                    <ol>
+                        <li>Dissolva a gelatina sem sabor em 5 colheres de sopa de água e aqueça no micro-ondas por 15 segundos.</li>
+                        <li>No liquidificador, bata o leite condensado, o creme de leite, o leite e a gelatina dissolvida até ficar homogêneo.</li>
+                        <li>Faça a calda: leve o açúcar ao fogo baixo até derreter e formar um caramelo. Despeje em uma forma de pudim.</li>
+                        <li>Despeje a mistura do liquidificador sobre a calda e leve à geladeira por pelo menos 4 horas.</li>
+                        <li>Desenforme e sirva gelado.</li>
+                    </ol>
+                    <p class="dica">Se quiser variar, adicione raspas de limão ou essência de baunilha na mistura — isso dá um sabor mais sofisticado sem complicar a receita.</p>
+
+                    <img src="imgs/pudim.jpg" alt="Pudim pronto">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé Padronizado -->
+    <footer>
+        <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+
+        <nav>
+            <a href="index.html"><i class="bi bi-house"></i> Home</a>
+            <a href="sobre.html"><i class="bi bi-people"></i> Sobre Nós</a>
+            <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+            <a href="produtos.html"><i class="bi bi-basket"></i> Produtos</a>
+        </nav>
+
+        <div class="socials">
+            <a href="#"><i class="bi bi-whatsapp"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-facebook"></i></a>
+        </div>
+
+        <button><i class="bi bi-envelope-fill"></i> Contato</button>
+    </footer>
+
+    <script>
+        // Menu Mobile
+        const menuToggle = document.getElementById("menuToggle");
+        const closeMenu = document.getElementById("closeMenu");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const overlay = document.getElementById("overlay");
+        const body = document.body;
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle("active");
+            overlay.classList.toggle("active");
+            body.classList.toggle("menu-open");
+        }
+
+        menuToggle.addEventListener("click", toggleMenu);
+        closeMenu.addEventListener("click", toggleMenu);
+        overlay.addEventListener("click", toggleMenu);
+
+        // Fechar menu ao clicar em links
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+    </script>
+</body>
+
+</html>

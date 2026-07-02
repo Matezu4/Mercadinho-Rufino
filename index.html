@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercadinho Rufino</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+         :root {
+            --primary-color: #d76b7e;
+            --secondary-color: #a3db59;
+            --background-color: #fffbe6;
+            --card-color: #d7f5d5;
+            --text-dark: #2b4a2b;
+            --text-light: white;
+            --footer-color: #d88952;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: var(--background-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        body.menu-open {
+            overflow: hidden;
+        }
+        /* HEADER PADRONIZADO */
+        
+        header {
+            background: linear-gradient(90deg, #e88290, #d76b7e);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .header-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+        /* MENU HAMBURGUER - SEMPRE VISÍVEL */
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        /* NAV DESKTOP - APENAS NO DESKTOP */
+        
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .desktop-nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
+        
+        .desktop-nav a:hover {
+            color: #88481a;
+        }
+        /* BARRA DE PESQUISA DESKTOP */
+        
+        .search-box {
+            background: white;
+            border-radius: 25px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            width: 260px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 8px;
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .search-box i {
+            font-size: 18px;
+            color: #d88952;
+            cursor: pointer;
+        }
+        /* BARRA DE PESQUISA MOBILE */
+        
+        .mobile-search-container {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+        }
+        /* MENU MOBILE LATERAL */
+        
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: linear-gradient(180deg, #e88290, #d76b7e);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu.active {
+            left: 0;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .mobile-menu-header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .mobile-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+        }
+        
+        .mobile-nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 10px;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        /* CONTEÚDO PRINCIPAL */
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        
+        .info {
+            background: var(--card-color);
+            padding: 20px;
+            border-radius: 15px;
+            width: 40%;
+            height: 520px;
+            max-width: 480px;
+            min-width: 280px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info h2 {
+            margin-top: 10px;
+            color: #497a35;
+            font-size: 22px;
+            margin-bottom: 1px;
+        }
+        
+        .info h2 span {
+            color: #9c0a25;
+        }
+        
+        .info-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .info-content p {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .info-content img {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        
+        .buttons {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 100%;
+            justify-content: flex-start;
+        }
+        
+        .buttons button {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: rgba(163, 219, 89, 0.7);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+            flex: 1;
+            min-width: 40px;
+        }
+        
+        .buttons button:hover {
+            background-color: #89c471;
+        }
+        
+        .socials {
+            margin-top: 15px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .socials a {
+            font-size: 22px;
+            color: var(--text-dark);
+            transition: 0.3s;
+        }
+        
+        .socials a:hover {
+            color: #88481a;
+        }
+        
+        .carousel {
+            width: 30%;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .carousel-box {
+            background: var(--card-color);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.08);
+            width: 400px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .carousel-box h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .carousel-box h3 a {
+            color: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .carousel-box h3 span {
+            color: var(--primary-color);
+        }
+        
+        .carousel-box img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        /* RODAPÉ PADRONIZADO */
+        
+        footer {
+            background-color: var(--footer-color);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: auto;
+            gap: 15px;
+        }
+        
+        footer img {
+            width: 100px;
+            border-radius: 50%;
+        }
+        
+        footer nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        footer nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        footer nav a:hover {
+            color: #88481a;
+        }
+        
+        footer .socials {
+            display: flex;
+            gap: 12px;
+        }
+        
+        footer .socials a {
+            color: white;
+            font-size: 20px;
+        }
+        
+        footer button {
+            background: var(--card-color);
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        footer button:hover {
+            background: #c3e6c3;
+        }
+        /* RESPONSIVIDADE PADRONIZADA */
+        
+        @media (max-width: 768px) {
+            /* HEADER MOBILE */
+            .menu-toggle {
+                display: block;
+            }
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-search-container {
+                display: flex;
+            }
+            header img {
+                display: block;
+            }
+            .header-container {
+                flex-wrap: nowrap;
+            }
+            .logo-container {
+                flex: 1;
+            }
+            /* CONTEÚDO MOBILE */
+            .container {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+            }
+            .info,
+            .carousel {
+                width: 100%;
+                max-width: 100%;
+            }
+            .info-content {
+                flex-direction: column;
+            }
+            .info-content img {
+                align-self: center;
+            }
+            .carousel-box {
+                width: 100%;
+                max-width: 100%;
+            }
+            /* RODAPÉ MOBILE */
+            footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            footer nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 10px 15px;
+            }
+            header img {
+                width: 60px;
+                height: 60px;
+            }
+            .info {
+                height: auto;
+                min-height: 520px;
+            }
+            .buttons {
+                flex-direction: column;
+            }
+            .carousel-box img {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<script>
+    // Sistema de Pesquisa Global
+    function setupGlobalSearch() {
+        const searchInputs = document.querySelectorAll('.search-box input');
+        const searchIcons = document.querySelectorAll('.search-box i');
+        
+        // Função para executar a busca e redirecionar
+        function performGlobalSearch(searchTerm) {
+            if (!searchTerm.trim()) {
+                return; // Não faz nada se estiver vazio
+            }
+            
+            // Codificar o termo de busca para URL
+            const encodedTerm = encodeURIComponent(searchTerm.trim());
+            
+            // Redirecionar para produtos.html com o parâmetro de busca
+            window.location.href = `produtos.html?search=${encodedTerm}`;
+        }
+        
+        // Event listeners para todos os inputs de busca
+        searchInputs.forEach(input => {
+            // Busca ao pressionar Enter
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performGlobalSearch(this.value);
+                }
+            });
+            
+            // Foco no input - mostrar dica se estiver na página de produtos
+            if (window.location.pathname.includes('produtos.html')) {
+                input.setAttribute('placeholder', 'Busque por produtos, categorias...');
+            }
+        });
+        
+        // Event listeners para ícones de busca
+        searchIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const searchInput = this.previousElementSibling;
+                performGlobalSearch(searchInput.value);
+            });
+        });
+        
+        // Adicionar estilo visual para indicar que a busca é global
+        const style = document.createElement('style');
+        style.textContent = `
+            .search-box {
+                position: relative;
+                transition: all 0.3s ease;
+            }
+            
+            .search-box:focus-within {
+                box-shadow: 0px 3px 12px rgba(215, 107, 126, 0.3);
+                transform: scale(1.02);
+            }
+            
+            .search-box::after {
+                content: '↵';
+                position: absolute;
+                right: 35px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #d88952;
+                font-weight: bold;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            }
+            
+            .search-box:focus-within::after {
+                opacity: 1;
+            }
+            
+            .search-box input:focus {
+                padding-right: 25px;
+            }
+            
+            @media (max-width: 768px) {
+                .search-box::after {
+                    display: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Inicializar sistema de busca global
+    document.addEventListener('DOMContentLoaded', function() {
+        setupGlobalSearch();
+    });
+</script>
+
+<body>
+    <!-- Overlay para fechar o menu -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Menu Mobile Lateral -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+            <button class="close-menu" id="closeMenu">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <nav class="mobile-nav">
+            <a href="index.html"><i class="bi bi-house-door-fill"></i> Home</a>
+            <a href="sobre.html"><i class="bi bi-people-fill"></i> Sobre Nós</a>
+            <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+            <a href="produtos.html"><i class="bi bi-basket-fill"></i> Produtos</a>
+            <a href="promo.html"><i class="bi bi-percent"></i> Promoções</a>
+            <a href="novo.html"><i class="bi bi-stars"></i> Novidades</a>
+            <a href="#"><i class="bi bi-geo-alt-fill"></i> Localização</a>
+            <a href="#"><i class="bi bi-telephone-inbound-fill"></i> Contato</a>
+        </nav>
+    </div>
+
+    <!-- Cabeçalho Padronizado -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+            </div>
+
+            <nav class="desktop-nav">
+                <a href="index.html"><i class="bi bi-house-door-fill"></i> Home</a>
+                <a href="sobre.html"><i class="bi bi-people-fill"></i> Sobre Nós</a>
+                <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+                <a href="produtos.html"><i class="bi bi-basket-fill"></i> Produtos</a>
+                <a href="promo.html"><i class="bi bi-percent"></i> Promoções</a>
+                <a href="novo.html"><i class="bi bi-stars"></i> Novidades</a>
+
+                <div class="search-box">
+                    <input type="text" placeholder="Buscar produtos...">
+                    <i class="bi bi-search"></i>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Barra de pesquisa mobile -->
+        <div class="mobile-search-container">
+            <div class="search-box" style="width: 100%;">
+                <input type="text" placeholder="Buscar produtos...">
+                <i class="bi bi-search"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo -->
+    <div class="container">
+        <div class="info">
+            <h2><i class="bi bi-shop"></i> MERCADINHO</h2>
+            <h2><span>RUFINO</span></h2>
+
+            <div class="info-content">
+                <p>
+                    Somos um negócio familiar que valoriza tradição, qualidade e proximidade com nossos clientes. Aqui você encontra nossos produtos, promoções e novidades, sempre pensados para atender ao dia a dia da nossa comunidade com carinho e confiança. Navegue pelo
+                    catálogo e descubra o que preparamos para você!
+                </p>
+                <img src="imgs/cesta.png" alt="Logo Loja">
+            </div>
+
+            <div class="buttons">
+                <button><i class="bi bi-geo-alt-fill" style="color: red;"></i> Nossa Localização</button>
+                <button><i class="bi bi-telephone-inbound-fill" style="color: green;"></i> Fale Conosco</button>
+            </div>
+
+            <div class="socials">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-whatsapp"></i></a>
+            </div>
+        </div>
+
+        <div class="carousel">
+            <div class="carousel-box">
+                <h3>
+                    <a href="promo.html">
+                        <i class="bi bi-percent"></i> <span>PROMOÇÕES</span>
+                    </a>
+                </h3>
+                <img id="promo-img" src="imgs/promo.png" alt="Promoção">
+            </div>
+
+            <div class="carousel-box">
+                <h3>
+                    <a href="novo.html">
+                        <i class="bi bi-stars"></i> <span>NOVIDADES</span>
+                    </a>
+                </h3>
+                <img id="news-img" src="imgs/gomets.png" alt="Novidade">
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé Padronizado -->
+    <footer>
+        <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+
+        <nav>
+            <a href="index.html"><i class="bi bi-house"></i> Home</a>
+            <a href="sobre.html"><i class="bi bi-people"></i> Sobre Nós</a>
+            <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+            <a href="produtos.html"><i class="bi bi-basket"></i> Produtos</a>
+        </nav>
+
+        <div class="socials">
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-whatsapp"></i></a>
+        </div>
+
+        <button><i class="bi bi-envelope-fill"></i> Contato</button>
+    </footer>
+
+    <script>
+        // Menu Mobile
+        const menuToggle = document.getElementById("menuToggle");
+        const closeMenu = document.getElementById("closeMenu");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const overlay = document.getElementById("overlay");
+        const body = document.body;
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle("active");
+            overlay.classList.toggle("active");
+            body.classList.toggle("menu-open");
+        }
+
+        menuToggle.addEventListener("click", toggleMenu);
+        closeMenu.addEventListener("click", toggleMenu);
+        overlay.addEventListener("click", toggleMenu);
+
+        // Fechar menu ao clicar em links
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Carrossel de imagens
+        const promoImg = document.getElementById("promo-img");
+        const newsImg = document.getElementById("news-img");
+        const promoImages = ["imgs/carrossel1.png", "imgs/frango.png", "imgs/carrossel3.png"];
+        const newsImages = ["imgs/gomets.png", "imgs/waffles.png", "imgs/bombom.png"];
+
+        let promoIndex = 0,
+            newsIndex = 0;
+
+        setInterval(() => {
+            promoIndex = (promoIndex + 1) % promoImages.length;
+            promoImg.src = promoImages[promoIndex];
+        }, 3000);
+
+        setInterval(() => {
+            newsIndex = (newsIndex + 1) % newsImages.length;
+            newsImg.src = newsImages[newsIndex];
+        }, 4000);
+    </script>
+</body>
+
+</html>

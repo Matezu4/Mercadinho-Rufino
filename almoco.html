@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receitas para Almoço</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+         :root {
+            --primary-color: #d76b7e;
+            --secondary-color: #8fc58b;
+            --background-color: #dbe6c0;
+            --text-dark: #222;
+            --footer-color: #d88952;
+            --container-bg: #f8f9e4;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        body.menu-open {
+            overflow: hidden;
+        }
+        /* Cabeçalho */
+        
+        header {
+            background: linear-gradient(90deg, #e88290, #d76b7e);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            transition: all 0.3s ease;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        nav a:hover {
+            color: #88481a;
+        }
+        /* Barra de busca */
+        
+        .search-box {
+            background: white;
+            border-radius: 25px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            width: 260px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 8px;
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .search-box i {
+            font-size: 18px;
+            color: #d88952;
+            cursor: pointer;
+        }
+        /* Menu Mobile Lateral */
+        
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background: linear-gradient(180deg, #e88290, #d76b7e);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mobile-menu.active {
+            left: 0;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .mobile-menu-header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .mobile-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .mobile-nav a:hover {
+            color: #88481a;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        /* Banner */
+        
+        .banner {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .banner h1 {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 10px 30px;
+            border-radius: 10px;
+            font-size: 28px;
+        }
+        /* Container principal */
+        
+        .main-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        /* Container para cada receita */
+        
+        .recipe-container {
+            background-color: var(--container-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+            padding: 20px;
+        }
+        /* Conteúdo da receita */
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            padding: 15px;
+        }
+        
+        .receita {
+            width: 45%;
+        }
+        
+        .receita img {
+            width: 90%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .ingredientes {
+            font-size: 16px;
+        }
+        
+        .ingredientes h2 {
+            color: #ae431e;
+            margin-bottom: 5px;
+        }
+        
+        .ingredientes ul {
+            color: #88481a;
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .preparo {
+            width: 45%;
+            font-size: 16px;
+            border-left: 2px solid #d06224;
+            padding-left: 20px;
+        }
+        
+        .preparo h2 {
+            color: #849a28;
+            margin-bottom: 5px;
+        }
+        
+        .preparo ol {
+            color: #2b4a2b;
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .preparo img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .dica {
+            color: #ab2a02;
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 10px;
+            background-color: #ffe6d6;
+            border-radius: 8px;
+            border-left: 4px solid #d06224;
+        }
+        /* Footer */
+        
+        footer {
+            background-color: var(--footer-color);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: auto;
+            gap: 15px;
+        }
+        
+        footer img {
+            width: 100px;
+            border-radius: 50%;
+        }
+        
+        footer nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        footer nav a {
+            margin: 0 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        footer nav a:hover {
+            color: #333;
+        }
+        
+        footer .socials {
+            display: flex;
+            gap: 12px;
+        }
+        
+        footer .socials a {
+            color: white;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+        
+        footer .socials a:hover {
+            color: #333;
+        }
+        
+        footer button {
+            background: #d7f5d5;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            color: #2b4a2b;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        footer button:hover {
+            background: #c3e6c3;
+        }
+        /* Responsivo */
+        
+        @media (max-width: 992px) {
+            .container {
+                gap: 30px;
+            }
+            .receita,
+            .preparo {
+                width: 48%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 10px 15px;
+            }
+            header img {
+                display: none;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            nav:not(.mobile-nav) {
+                display: none;
+            }
+            .search-box {
+                width: 100%;
+                margin-top: 10px;
+                order: 3;
+                display: none;
+            }
+            .header-search {
+                display: none;
+                width: 100%;
+                margin-top: 10px;
+                order: 3;
+            }
+            .container {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+                gap: 25px;
+            }
+            .receita,
+            .preparo {
+                width: 90%;
+            }
+            .preparo {
+                border-left: none;
+                border-top: 2px solid #d06224;
+                padding-left: 0;
+                padding-top: 20px;
+            }
+            .banner h1 {
+                font-size: 24px;
+                padding: 8px 20px;
+            }
+            footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            footer nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+            footer nav a {
+                margin: 5px 0;
+            }
+            .recipe-container {
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header img {
+                width: 60px;
+                height: 60px;
+            }
+            .receita,
+            .preparo {
+                width: 95%;
+            }
+            .receita img,
+            .preparo img {
+                width: 100%;
+            }
+            .ingredientes h2,
+            .preparo h2 {
+                font-size: 20px;
+            }
+            .banner h1 {
+                font-size: 20px;
+            }
+            .recipe-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<script>
+    // Sistema de Pesquisa Global
+    function setupGlobalSearch() {
+        const searchInputs = document.querySelectorAll('.search-box input');
+        const searchIcons = document.querySelectorAll('.search-box i');
+        
+        // Função para executar a busca e redirecionar
+        function performGlobalSearch(searchTerm) {
+            if (!searchTerm.trim()) {
+                return; // Não faz nada se estiver vazio
+            }
+            
+            // Codificar o termo de busca para URL
+            const encodedTerm = encodeURIComponent(searchTerm.trim());
+            
+            // Redirecionar para produtos.html com o parâmetro de busca
+            window.location.href = `produtos.html?search=${encodedTerm}`;
+        }
+        
+        // Event listeners para todos os inputs de busca
+        searchInputs.forEach(input => {
+            // Busca ao pressionar Enter
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performGlobalSearch(this.value);
+                }
+            });
+            
+            // Foco no input - mostrar dica se estiver na página de produtos
+            if (window.location.pathname.includes('produtos.html')) {
+                input.setAttribute('placeholder', 'Busque por produtos, categorias...');
+            }
+        });
+        
+        // Event listeners para ícones de busca
+        searchIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const searchInput = this.previousElementSibling;
+                performGlobalSearch(searchInput.value);
+            });
+        });
+        
+        // Adicionar estilo visual para indicar que a busca é global
+        const style = document.createElement('style');
+        style.textContent = `
+            .search-box {
+                position: relative;
+                transition: all 0.3s ease;
+            }
+            
+            .search-box:focus-within {
+                box-shadow: 0px 3px 12px rgba(215, 107, 126, 0.3);
+                transform: scale(1.02);
+            }
+            
+            .search-box::after {
+                content: '↵';
+                position: absolute;
+                right: 35px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #d88952;
+                font-weight: bold;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            }
+            
+            .search-box:focus-within::after {
+                opacity: 1;
+            }
+            
+            .search-box input:focus {
+                padding-right: 25px;
+            }
+            
+            @media (max-width: 768px) {
+                .search-box::after {
+                    display: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Inicializar sistema de busca global
+    document.addEventListener('DOMContentLoaded', function() {
+        setupGlobalSearch();
+    });
+</script>
+
+<body>
+    <!-- Overlay para fechar o menu -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Menu Mobile Lateral -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+            <button class="close-menu" id="closeMenu">
+        <i class="bi bi-x-lg"></i>
+      </button>
+        </div>
+
+        <nav class="mobile-nav">
+            <a href="index.html"><i class="bi bi-house-door-fill"></i> Home</a>
+            <a href="sobre.html"><i class="bi bi-people-fill"></i> Sobre Nós</a>
+            <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+
+            <a href="produtos.html" id="mobileProductsToggle">
+                <i class="bi bi-basket-fill"></i> Produtos <i class="bi bi-chevron-down"></i>
+            </a>
+
+            <div class="search-box mobile-search">
+                <input type="text" placeholder="Busque pelo produto...">
+                <i class="bi bi-search-heart"></i>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Cabeçalho -->
+    <header>
+        <div class="logo-container">
+            <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+            <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+      </button>
+        </div>
+
+        <nav id="mainNav">
+            <a href="index.html"><i class="bi bi-house-door-fill"></i> <span>Home</span></a>
+            <a href="sobre.html"><i class="bi bi-people-fill"></i> <span>Sobre Nós</span></a>
+            <a href="receitas.html"><i class="bi bi-journal-text"></i> <span>Receitas</span></a>
+            <a href="produtos.html"><i class="bi bi-basket-fill"></i> <span>Produtos</span></a>
+
+            <div class="search-box">
+                <input type="text" placeholder="Busque pelo produto...">
+                <i class="bi bi-search-heart"></i>
+            </div>
+        </nav>
+
+
+    </header>
+
+    <!-- Banner -->
+    <div class="banner">
+        <h1>Almoço</h1>
+    </div>
+
+    <!-- Container principal -->
+    <div class="main-container">
+        <!-- Receita 1 - Frango Grelhado com Arroz e Legumes -->
+        <div class="recipe-container">
+            <div class="container">
+                <div class="receita">
+                    <img src="imgs/ingre6.png" alt="Ingredientes para Frango Grelhado">
+                    <div class="ingredientes">
+                        <h2>Frango Grelhado com Arroz</h2>
+                        <p><strong>Ingredientes (4 porções):</strong></p>
+                        <ul>
+                            <li>4 filés de frango</li>
+                            <li>2 xícaras de arroz</li>
+                            <li>2 dentes de alho</li>
+                            <li>Sal, pimenta e temperos a gosto</li>
+                            <li>3 colheres de sopa de óleo</li>
+                            <li>4 xícaras de água fervente</li>
+                            <li>Salsinha para decorar</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="preparo">
+                    <h2>Modo de preparo:</h2>
+                    <ol>
+                        <li>Tempere os filés de frango com sal, pimenta e alho amassado. Reserve por 15 minutos.</li>
+                        <li>Em uma panela, refogue metade da cebola picada no óleo, adicione o arroz e mexa por 2 minutos.</li>
+                        <li>Adicione a água fervente e o sal. Cozinhe em fogo baixo até a água secar.</li>
+                        <li>Enquanto isso, grelhe o frango em uma frigideira antiaderente até dourar dos dois lados.</li>
+                        <li>Sirva o frango grelhado acompanhado do arroz. Decore com salsinha.</li>
+                    </ol>
+                    <p class="dica">Dica: Para um frango mais suculento, marque por 30 minutos com limão antes de temperar. Você pode substituir os legumes por outros da sua preferência, como chuchu ou abobrinha.</p>
+
+                    <img src="imgs/arroz.jpg" alt="Frango Grelhado pronto">
+                </div>
+            </div>
+        </div>
+
+        <!-- Receita 2 - Macarrão à Bolonhesa -->
+        <div class="recipe-container">
+            <div class="container">
+                <div class="receita">
+                    <img src="imgs/ingre7.png" alt="Ingredientes para Macarrão à Bolonhesa">
+                    <div class="ingredientes">
+                        <h2>Macarrão à Bolonhesa</h2>
+                        <p><strong>Ingredientes (4 porções):</strong></p>
+                        <ul>
+                            <li>500g de macarrão espaguete</li>
+                            <li>500g de carne moída</li>
+                            <li>1 cebola média picada</li>
+                            <li>2 dentes de alho picados</li>
+                            <li>2 tomates maduros picados</li>
+                            <li>1 lata de molho de tomate</li>
+                            <li>2 colheres de sopa de óleo</li>
+                            <li>Sal, pimenta e orégano a gosto</li>
+                            <li>Queijo ralado para servir</li>
+                            <li>Manjericão fresco (opcional)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="preparo">
+                    <h2>Modo de preparo:</h2>
+                    <ol>
+                        <li>Cozinhe o macarrão conforme as instruções da embalagem. Escorra e reserve.</li>
+                        <li>Em uma panela, aqueça o óleo e refogue a cebola e o alho até dourarem.</li>
+                        <li>Adicione a carne moída e cozinhe até dourar, desmanchando com uma colher.</li>
+                        <li>Junte os tomates picados e cozinhe por 5 minutos até amolecerem.</li>
+                        <li>Acrescente o molho de tomate, tempere com sal, pimenta e orégano.</li>
+                        <li>Cozinhe em fogo baixo por 15-20 minutos, mexendo ocasionalmente.</li>
+                        <li>Sirva o molho sobre o macarrão cozido, polvilhe queijo ralado e decore com manjericão.</li>
+                    </ol>
+                    <p class="dica">Dica: Para um molho mais encorpado, adicione uma cenoura ralada ao refogar a cebola. Se quiser incrementar, coloque uma colher de sopa de extrato de tomate para intensificar o sabor.</p>
+
+                    <img src="imgs/macarronada.jpg" alt="Macarrão à Bolonhesa pronto">
+                </div>
+            </div>
+        </div>
+
+        <!-- Receita 3 - Omelete Recheada -->
+        <div class="recipe-container">
+            <div class="container">
+                <div class="receita">
+                    <img src="imgs/ingre8.png" alt="Ingredientes para Omelete Recheada">
+                    <div class="ingredientes">
+                        <h2>Omelete Recheada</h2>
+                        <p><strong>Ingredientes (2 porções):</strong></p>
+                        <ul>
+                            <li>4 ovos</li>
+                            <li>1 tomate picado</li>
+                            <li>1/4 de cebola picada</li>
+                            <li>2 fatias de presunto picado</li>
+                            <li>2 fatias de queijo picado</li>
+                            <li>2 colheres de sopa de leite</li>
+                            <li>Sal, pimenta e salsinha a gosto</li>
+                            <li>1 colher de sopa de óleo ou manteiga</li>
+                            <li>Arroz branco para acompanhar</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="preparo">
+                    <h2>Modo de preparo:</h2>
+                    <ol>
+                        <li>Bata os ovos com o leite, sal e pimenta até ficarem homogêneos.</li>
+                        <li>Adicione o tomate, cebola, presunto, queijo e salsinha picada à mistura de ovos.</li>
+                        <li>Aqueça o óleo em uma frigideira antiaderente em fogo médio.</li>
+                        <li>Despeje a mistura na frigideira e espalhe uniformemente.</li>
+                        <li>Cozinhe por 3-4 minutos até a base estar firme e dourada.</li>
+                        <li>Com uma espátula, vire a omelete e cozinhe por mais 2-3 minutos do outro lado.</li>
+                        <li>Dobre ao meio e sirva quente, acompanhada de arroz branco.</li>
+                    </ol>
+                    <p class="dica">Dica: Para uma omelete mais fofinha, bata bem os ovos com um garfo e adicione uma pitada de fermento em pó. Você pode variar os recheios usando frango desfiado, atum ou legumes como espinafre e milho.</p>
+
+                    <img src="imgs/omelete.jpg" alt="Omelete Recheada pronta">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo Rufino">
+
+        <nav>
+            <a href="index.html"><i class="bi bi-house"></i> Home</a>
+            <a href="sobre.html"><i class="bi bi-people"></i> Sobre Nós</a>
+            <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+            <a href="produtos.html"><i class="bi bi-basket"></i> Produtos</a>
+        </nav>
+
+        <div class="socials">
+            <a href="#"><i class="bi bi-whatsapp"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-facebook"></i></a>
+        </div>
+
+        <button><i class="bi bi-envelope-fill"></i> Contato</button>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const closeMenu = document.getElementById("closeMenu");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const overlay = document.getElementById("overlay");
+        const body = document.body;
+
+        menuToggle.addEventListener("click", () => {
+            mobileMenu.classList.add("active");
+            overlay.classList.add("active");
+            body.classList.add("menu-open");
+        });
+
+        closeMenu.addEventListener("click", () => {
+            mobileMenu.classList.remove("active");
+            overlay.classList.remove("active");
+            body.classList.remove("menu-open");
+        });
+
+        overlay.addEventListener("click", () => {
+            mobileMenu.classList.remove("active");
+            overlay.classList.remove("active");
+            body.classList.remove("menu-open");
+        });
+
+        // Dropdown no mobile
+        const mobileProductsToggle = document.getElementById("mobileProductsToggle");
+        const mobileProductsDropdown = document.getElementById("mobileProductsDropdown");
+
+        mobileProductsToggle.addEventListener("click", (e) => {
+            e.preventDefault();
+            mobileProductsDropdown.classList.toggle("active");
+        });
+    </script>
+</body>
+
+</html>

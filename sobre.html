@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nós - Mercadinho Rufino</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        /* ===== RESET E ESTILOS BASE ===== */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+         :root {
+            --rosa: #ff4081;
+            --rosa-escuro: #e91e63;
+            --verde: #a7cca7;
+            --verde-claro: #c3e6c3;
+            --verde-escuro: #2b4a2b;
+            --marrom: #d88952;
+            --marrom-claro: #a39062;
+            --marrom-escuro: #88481a;
+            --branco: #ffffff;
+            --creme: #fffbe6;
+            --cinza: #333;
+            --cinza-claro: #ddd;
+            --primary-color: #d76b7e;
+            --secondary-color: #8fc58b;
+            --background-color: #dbe6c0;
+            --text-dark: #222;
+            --footer-color: #d88952;
+            --container-bg: #f8f9e4;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        body.menu-open {
+            overflow: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        .rosa {
+            color: var(--rosa);
+        }
+        
+        .amarelo {
+            color: var(--verde);
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* ===== CABEÇALHO PADRONIZADO ===== */
+        
+        header {
+            background: linear-gradient(90deg, #e88290, #d76b7e);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .header-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        header img:hover {
+            transform: scale(1.05);
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .desktop-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
+        
+        .desktop-nav a:hover {
+            color: #88481a;
+        }
+        
+        .search-box {
+            background: white;
+            border-radius: 25px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            width: 260px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 8px;
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .search-box i {
+            font-size: 18px;
+            color: #d88952;
+            cursor: pointer;
+        }
+        
+        .mobile-search-container {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: linear-gradient(180deg, #e88290, #d76b7e);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu.active {
+            left: 0;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .mobile-menu-header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .mobile-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+        }
+        
+        .mobile-nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 10px;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        /* ===== SEÇÃO PRINCIPAL ===== */
+        
+        .sobre-hero {
+            padding: 60px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .historia,
+        .missao {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .historia h2,
+        .missao h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .img-box {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid var(--verde-claro);
+            padding: 5px;
+            background: var(--branco);
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .img-box:hover {
+            transform: scale(1.05);
+        }
+        /* ===== SEÇÃO SOBRE/CONTATO ===== */
+        
+        .sobre-detalhes {
+            padding: 60px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .contato,
+        .sobre-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .img-round {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid var(--verde-claro);
+            padding: 5px;
+            background: var(--branco);
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .img-round:hover {
+            transform: scale(1.05);
+        }
+        /* ===== BOTÕES ===== */
+        
+        .mapa-btn,
+        .btn-enviar {
+            padding: 12px 20px;
+            color: var(--cinza);
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            width: 200px;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .mapa-btn {
+            background-color: var(--verde);
+        }
+        
+        .btn-enviar {
+            background-color: var(--rosa);
+            color: var(--branco);
+        }
+        
+        .mapa-btn:hover {
+            background-color: var(--marrom-claro);
+            transform: translateY(-2px);
+        }
+        
+        .btn-enviar:hover {
+            background-color: var(--rosa-escuro);
+            transform: translateY(-2px);
+        }
+        /* ===== FORMULÁRIO ===== */
+        
+        .form-contato {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .form-contato input,
+        .form-contato textarea {
+            padding: 12px;
+            border: 1px solid var(--cinza-claro);
+            border-radius: 15px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 14px;
+        }
+        
+        .form-contato input:focus,
+        .form-contato textarea:focus {
+            border-color: var(--verde);
+            box-shadow: 0 0 0 2px rgba(167, 204, 167, 0.3);
+        }
+        
+        .form-contato textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        /* ===== RODAPÉ PADRONIZADO ===== */
+        
+        footer {
+            background-color: var(--footer-color);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: auto;
+            gap: 15px;
+        }
+        
+        footer img {
+            width: 100px;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        footer img:hover {
+            transform: scale(1.05);
+        }
+        
+        footer nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        footer nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        footer nav a:hover {
+            color: #333;
+        }
+        
+        footer .socials {
+            display: flex;
+            gap: 12px;
+        }
+        
+        footer .socials a {
+            color: white;
+            font-size: 20px;
+        }
+        
+        footer button {
+            background: #d7f5d5;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            color: #2b4a2b;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        footer button:hover {
+            background: #c3e6c3;
+        }
+        /* ===== RESPONSIVIDADE ===== */
+        
+        @media (max-width: 992px) {
+            .sobre-hero,
+            .sobre-detalhes {
+                gap: 30px;
+            }
+            .historia,
+            .missao,
+            .contato,
+            .sobre-info {
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-search-container {
+                display: flex;
+            }
+            .header-container {
+                flex-wrap: nowrap;
+            }
+            .logo-container {
+                flex: 1;
+            }
+            .sobre-hero,
+            .sobre-detalhes {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 30px 0;
+            }
+            .historia,
+            .missao,
+            .contato,
+            .sobre-info {
+                text-align: center;
+            }
+            .img-box,
+            .img-round {
+                width: 200px;
+                height: 200px;
+            }
+            .mapa-btn,
+            .btn-enviar {
+                width: 100%;
+                max-width: 250px;
+                margin: 0 auto;
+            }
+            footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            footer nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+            .sobre-hero,
+            .sobre-detalhes {
+                padding: 20px 0;
+            }
+            .historia h2,
+            .missao h2 {
+                font-size: 1.7rem;
+            }
+            .img-box,
+            .img-round {
+                width: 180px;
+                height: 180px;
+            }
+            .mobile-menu {
+                width: 250px;
+                left: -250px;
+            }
+            footer {
+                padding: 20px 10px;
+            }
+            footer nav a {
+                font-size: 13px;
+                padding: 6px 10px;
+            }
+            footer .socials a {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 10px 15px;
+            }
+            header img {
+                width: 60px;
+                height: 60px;
+            }
+            .img-box,
+            .img-round {
+                width: 150px;
+                height: 150px;
+            }
+            .historia h2,
+            .missao h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<script>
+    // Sistema de Pesquisa Global
+    function setupGlobalSearch() {
+        const searchInputs = document.querySelectorAll('.search-box input');
+        const searchIcons = document.querySelectorAll('.search-box i');
+        
+        // Função para executar a busca e redirecionar
+        function performGlobalSearch(searchTerm) {
+            if (!searchTerm.trim()) {
+                return; // Não faz nada se estiver vazio
+            }
+            
+            // Codificar o termo de busca para URL
+            const encodedTerm = encodeURIComponent(searchTerm.trim());
+            
+            // Redirecionar para produtos.html com o parâmetro de busca
+            window.location.href = `produtos.html?search=${encodedTerm}`;
+        }
+        
+        // Event listeners para todos os inputs de busca
+        searchInputs.forEach(input => {
+            // Busca ao pressionar Enter
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performGlobalSearch(this.value);
+                }
+            });
+            
+            // Foco no input - mostrar dica se estiver na página de produtos
+            if (window.location.pathname.includes('produtos.html')) {
+                input.setAttribute('placeholder', 'Busque por produtos, categorias...');
+            }
+        });
+        
+        // Event listeners para ícones de busca
+        searchIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const searchInput = this.previousElementSibling;
+                performGlobalSearch(searchInput.value);
+            });
+        });
+        
+        // Adicionar estilo visual para indicar que a busca é global
+        const style = document.createElement('style');
+        style.textContent = `
+            .search-box {
+                position: relative;
+                transition: all 0.3s ease;
+            }
+            
+            .search-box:focus-within {
+                box-shadow: 0px 3px 12px rgba(215, 107, 126, 0.3);
+                transform: scale(1.02);
+            }
+            
+            .search-box::after {
+                content: '↵';
+                position: absolute;
+                right: 35px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #d88952;
+                font-weight: bold;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            }
+            
+            .search-box:focus-within::after {
+                opacity: 1;
+            }
+            
+            .search-box input:focus {
+                padding-right: 25px;
+            }
+            
+            @media (max-width: 768px) {
+                .search-box::after {
+                    display: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Inicializar sistema de busca global
+    document.addEventListener('DOMContentLoaded', function() {
+        setupGlobalSearch();
+    });
+</script>
+
+<body>
+    <!-- Overlay para fechar o menu -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Menu Mobile Lateral -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+            <button class="close-menu" id="closeMenu">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <nav class="mobile-nav">
+            <a href="index.html"><i class="bi bi-house-door-fill"></i> Home</a>
+            <a href="sobre.html"><i class="bi bi-people-fill"></i> Sobre Nós</a>
+            <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+            <a href="produtos.html"><i class="bi bi-basket-fill"></i> Produtos</a>
+            <a href="promo.html"><i class="bi bi-percent"></i> Promoções</a>
+            <a href="novo.html"><i class="bi bi-stars"></i> Novidades</a>
+            <a href="#"><i class="bi bi-geo-alt-fill"></i> Localização</a>
+            <a href="#"><i class="bi bi-telephone-inbound-fill"></i> Contato</a>
+        </nav>
+    </div>
+
+    <!-- Cabeçalho Padronizado -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+            </div>
+
+            <nav class="desktop-nav">
+                <a href="index.html"><i class="bi bi-house-door-fill"></i> Home</a>
+                <a href="sobre.html"><i class="bi bi-people-fill"></i> Sobre Nós</a>
+                <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+                <a href="produtos.html"><i class="bi bi-basket-fill"></i> Produtos</a>
+                <a href="promo.html"><i class="bi bi-percent"></i> Promoções</a>
+                <a href="novo.html"><i class="bi bi-stars"></i> Novidades</a>
+
+                <div class="search-box">
+                    <input type="text" placeholder="Buscar produtos...">
+                    <i class="bi bi-search"></i>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Barra de pesquisa mobile -->
+        <div class="mobile-search-container">
+            <div class="search-box" style="width: 100%;">
+                <input type="text" placeholder="Buscar produtos...">
+                <i class="bi bi-search"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main>
+        <!-- Seção História/Missão -->
+        <section class="sobre-hero container">
+            <div class="historia">
+                <img src="imgs/mercadinho.png" alt="Mercadinho Rufino" class="img-box">
+                <h2><span class="rosa">A história do</span> <span class="amarelo">mercadinho</span></h2>
+                <p>
+                    O Mercadinho Rufino nasceu como um pequeno comércio familiar, criado com dedicação e carinho para atender os vizinhos da região. Ao longo dos anos, crescemos mantendo os valores de proximidade e qualidade que sempre nos guiaram.
+                </p>
+            </div>
+
+            <div class="missao">
+                <h2 class="amarelo">Nossa missão</h2>
+                <p>
+                    No Mercadinho Rufino, nossa missão é oferecer produtos de qualidade com preços justos, sempre prezando pelo bom atendimento e pela valorização da comunidade local. Queremos ser mais que um mercado, queremos ser parte da sua família.
+                </p>
+                <img src="imgs/pratelera.png" alt="Prateleira de mercado" class="img-box">
+            </div>
+        </section>
+
+        <!-- Seção Sobre/Contato -->
+        <section class="sobre-detalhes container">
+            <div class="contato">
+                <img src="imgs/atendimento.png" alt="Atendimento ao cliente" class="img-round">
+                <h2 class="rosa">Contate-Nos</h2>
+                <p>
+                    Estamos sempre prontos para ouvir você. Fale conosco para dúvidas, sugestões ou pedidos — será um prazer atender!
+                </p>
+            </div>
+
+            <div class="sobre-info">
+                <h2><span class="rosa">Sobre</span> <span class="amarelo">Nós</span></h2>
+                <p>
+                    Somos o Mercadinho Rufino, um espaço feito para você e sua família. Trabalhamos todos os dias para oferecer praticidade, variedade e aquele atendimento próximo e acolhedor que só um mercadinho de bairro pode ter.
+                </p>
+
+                <a href="#localizacao" class="mapa-btn"><i class="bi bi-geo-alt-fill"></i> Nossa localização</a>
+
+                <form id="form-contato" class="form-contato">
+                    <input type="text" placeholder="Digite seu nome" required aria-label="Seu nome">
+                    <input type="email" placeholder="E-mail" required aria-label="Seu e-mail">
+                    <textarea placeholder="Digite sua mensagem" required aria-label="Sua mensagem"></textarea>
+                    <button type="submit" class="btn-enviar"><i class="bi bi-send-fill"></i> Enviar</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé Padronizado -->
+    <footer>
+        <img src="imgs/Logotipo_Mercadinho-removebg-preview.png" alt="Logo">
+
+        <nav>
+            <a href="index.html"><i class="bi bi-house"></i> Home</a>
+            <a href="sobre.html"><i class="bi bi-people"></i> Sobre Nós</a>
+            <a href="receitas.html"><i class="bi bi-journal-text"></i> Receitas</a>
+            <a href="produtos.html"><i class="bi bi-basket"></i> Produtos</a>
+        </nav>
+
+        <div class="socials">
+            <a href="#"><i class="bi bi-whatsapp"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-facebook"></i></a>
+        </div>
+
+        <button><i class="bi bi-envelope-fill"></i> Contato</button>
+    </footer>
+
+    <script>
+        // Menu Mobile
+        const menuToggle = document.getElementById("menuToggle");
+        const closeMenu = document.getElementById("closeMenu");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const overlay = document.getElementById("overlay");
+        const body = document.body;
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle("active");
+            overlay.classList.toggle("active");
+            body.classList.toggle("menu-open");
+        }
+
+        menuToggle.addEventListener("click", toggleMenu);
+        closeMenu.addEventListener("click", toggleMenu);
+        overlay.addEventListener("click", toggleMenu);
+
+        // Fechar menu ao clicar em links
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Manipulação do formulário
+        const form = document.getElementById("form-contato");
+        if (form) {
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                // Validação básica
+                const inputs = form.querySelectorAll('input, textarea');
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.style.borderColor = 'red';
+                    } else {
+                        input.style.borderColor = '';
+                    }
+                });
+
+                if (isValid) {
+                    // Simulação de envio
+                    alert("Mensagem enviada com sucesso! Entraremos em contato em breve.");
+                    form.reset();
+                } else {
+                    alert("Por favor, preencha todos os campos.");
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
